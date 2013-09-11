@@ -1,0 +1,3 @@
+uploaduser=<oss.sonatype.org username>
+uploadpassword=<oss.sonatype.org password
+pgppassword=<pgp password>

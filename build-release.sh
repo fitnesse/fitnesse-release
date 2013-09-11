@@ -4,7 +4,7 @@ VERSION=`date +%Y%m%d`
 DATE=`date +%Y/%m/%d`
 RELEASEDIR="FitNesseRoot/FrontPage/FitNesseDevelopment/FitNesseRelease$VERSION"
 DOWNLOADPAGE="FitNesseRoot/FitNesseDownload/content.txt" 
-
+EDITOR=vi
 
 
 function isokay() {
@@ -19,22 +19,22 @@ function die() {
     exit 1
 }
 
-test -x build-release.conf || die "No build-release.conf found."
-. build-release.conf
+test -f ./build-release.conf || die "No build-release.conf found."
+. ./build-release.conf
+export EDITOR
 
-#git submodule update || die "Can not update submodules"
+git submodule update || die "Can not update submodules"
 
-OLDVERSION=`grep '^!release ' content.txt | head -1 | cut -d ' ' -f 2`
+OLDVERSION=`grep '^!release ' fitnessedotorg/$DOWNLOADPAGE | head -1 | cut -d ' ' -f 2`
 
 echo "Releasing $VERSION. Old version: $OLDVERSION"
 
 isokay "Is all cruft removed from the frontpage?" || exit
+isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-# TODO: display releaseNotes page. Is this okay?
-
-(cd fitnesse && ant release publish -Dupload.user=$uploaduser -Dupload.password=$uploadpassword -Dpgp.password=$pgppassword)
+(cd fitnesse && ant release publish -Dupload.user=$uploaduser -Dupload.password=$uploadpassword -Dpgp.password=$pgppassword) || exit
 
 isokay "Is the distro okay?" || exit
 
@@ -43,16 +43,16 @@ open http://oss.sonatype.org
 isokay "Please release FitNesse on the maven repo?" || exit
 
 echo Building contributors
-(cd fitnesse && git log --pretty=format:" * %an" --since="$lastreleasedate" | sort | uniq) > contributors.tmp
-vi contributors.tmp
+(cd fitnesse && git log --pretty=format:" * %an" "$OLDVERSION..HEAD" | sort | uniq) > contributors.tmp
+$EDITOR contributors.tmp
 
 echo Building commit log
-`(cd fitnesse && git log --pretty=format:"|%ad|%an|%s|" --date=short --since="$lastreleasedate")` > commitlog.tmp
-vi commitlog.tmp
+(cd fitnesse && git log --pretty=format:"|%ad|%an|%s|" --date=short "$OLDVERSION..HEAD") > commitlog.tmp
+$EDITOR commitlog.tmp
 
 echo Building release notes
-echo " * First major change" > releasenotes.tmp
-vi releasenotes.tmp
+cat fitnesse/FitNesseRoot/FitNesse/ReleaseNotes/content.txt > releasenotes.tmp
+$EDITOR releasenotes.tmp
 
 
 mkdir -p fitnessedotorg/$RELEASEDIR
@@ -103,9 +103,11 @@ EOF
 
 echo "Copying fitnesse-standalone.jar to fitnesse.org"
 mkdir fitnessedotorg/releases/$VERSION
-cp fitnesse/dist/fitnesse-standalone.jar fitnessedotorg/releases/$VERSION
+cp fitnesse/dist/fitnesse-standalone.jar fitnessedotorg/releases/$VERSION || die "Can not copy fitnesse-standalone.jar"
 
-echo "Commit all"
-(cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v)
 
-(cd fitnesse && git tag $VERSION)
+echo "Commit all and push"
+(cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v || { git reset HEAD --hard; die "Not committed, nothing to do."; }; ) \
+	&& (cd fitnesse && git tag $VERSION && git push --tags) \
+	&& (cd fitnessedotorg && git push)
+
