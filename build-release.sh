@@ -23,7 +23,7 @@ test -f ./build-release.conf || die "No build-release.conf found."
 . ./build-release.conf
 export EDITOR
 
-git submodule update || die "Can not update submodules"
+git submodule foreach git pull || die "Can not update submodules"
 
 OLDVERSION=`grep '^!release ' fitnessedotorg/$DOWNLOADPAGE | head -1 | cut -d ' ' -f 2`
 
