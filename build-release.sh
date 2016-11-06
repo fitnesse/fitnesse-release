@@ -34,11 +34,11 @@ isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-(cd fitnesse && ant release publish -Dupload.user=$uploaduser -Dupload.password=$uploadpassword -Dpgp.password=$pgppassword) || exit
+(cd fitnesse && gradle release) || exit
 
 isokay "Is the distro okay?" || exit
 
-open http://oss.sonatype.org
+open https://bintray.com/fitnesse/release/fitnesse
 
 isokay "Please release FitNesse on the maven repo?" || exit
 
@@ -103,11 +103,10 @@ EOF
 
 echo "Copying fitnesse-standalone.jar to fitnesse.org"
 mkdir fitnessedotorg/releases/$VERSION
-cp fitnesse/dist/fitnesse-standalone.jar fitnessedotorg/releases/$VERSION || die "Can not copy fitnesse-standalone.jar"
+cp fitnesse/build/libs/fitnesse-$VERSION-standalone.jar fitnessedotorg/releases/$VERSION/fitnesse-standalone.jar || die "Can not copy fitnesse-standalone.jar"
 
 
 echo "Commit all and push"
 (cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v || { git reset HEAD --hard; die "Not committed, nothing to do."; }; ) \
-	&& (cd fitnesse && git tag $VERSION && git push --tags) \
 	&& (cd fitnessedotorg && git push)
 
