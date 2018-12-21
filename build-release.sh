@@ -105,6 +105,6 @@ cp fitnesse/build/libs/fitnesse-$VERSION-standalone.jar fitnessedotorg/releases/
 
 
 echo "Commit all and push"
-(cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v || { git reset HEAD --hard; die "Not committed, nothing to do."; }; ) \
+(cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
 	&& (cd fitnessedotorg && git push)
 
