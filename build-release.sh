@@ -19,8 +19,6 @@ function die() {
     exit 1
 }
 
-test -f ./build-release.conf || die "No build-release.conf found."
-. ./build-release.conf
 export EDITOR
 
 git submodule foreach git pull || die "Can not update submodules"
