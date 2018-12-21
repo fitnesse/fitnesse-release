@@ -1,6 +1,6 @@
 [submodule "fitnessedotorg"]
 	path = fitnessedotorg
-	url = git@github.com:woodybrood/fitnessedotorg.git
+	url = git@github.com:fitnesse/fitnessedotorg.git
 [submodule "fitnesse"]
 	path = fitnesse
 	url = git@github.com:unclebob/fitnesse.git
