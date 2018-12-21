@@ -103,6 +103,11 @@ echo "Copying fitnesse-standalone.jar to fitnesse.org"
 mkdir fitnessedotorg/releases/$VERSION
 cp fitnesse/build/libs/fitnesse-$VERSION-standalone.jar fitnessedotorg/releases/$VERSION/fitnesse-standalone.jar || die "Can not copy fitnesse-standalone.jar"
 
+echo "Setup fitnesse.org to use $VERSION"
+ed fitnessedotorg/ivy.xml << EOF
+14s/$OLDVERSION/$VERSION/g
+w
+EOF
 
 echo "Commit all and push"
 (cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v -m "Release $VERSION via $0" || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
