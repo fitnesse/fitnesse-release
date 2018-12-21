@@ -49,7 +49,11 @@ Be sure the following is added to `.git/config` of your local copy of `fitnessed
 		url = ec2-user@fitnesse.org:fitnessedotorg.git
 		fetch = +refs/heads/*:refs/remotes/prod/*
 
-Then:
+Then push your changes to the GitHub repo and to the website (`prod`):
 
 	git push prod master
 
+
+Now wait a bit and a new website should be launched. You can also update the
+version of FitNesse running by editing the `ivy.xml` file in `fitnessedotorg`
+repo.
