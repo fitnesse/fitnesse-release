@@ -21,7 +21,7 @@ function die() {
 
 export EDITOR
 
-git submodule foreach git pull || die "Can not update submodules"
+git submodule update --recursive --remote || die "Can not update submodules"
 
 OLDVERSION=`grep '^!release ' fitnessedotorg/$DOWNLOADPAGE | head -1 | cut -d ' ' -f 2`
 
