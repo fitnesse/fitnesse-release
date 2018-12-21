@@ -32,7 +32,7 @@ isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-(cd fitnesse && gradle release) || exit
+(cd fitnesse && gradle clean release) || exit
 
 isokay "Is the distro okay?" || exit
 
