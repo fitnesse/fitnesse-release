@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 VERSION=`date +%Y%m%d`
 DATE=`date +%Y/%m/%d`
