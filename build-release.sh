@@ -21,7 +21,8 @@ function die() {
 
 export EDITOR
 
-git submodule update --recursive --remote || die "Can not update submodules"
+(cd fitnesse && git pull origin master) || die "Can not update submodule fitnesse"
+(cd fitnessedotorg && git pull origin master) || die "Can not update submodule fitnessedotorg"
 
 OLDVERSION=`grep '^!release ' fitnessedotorg/$DOWNLOADPAGE | head -1 | cut -d ' ' -f 2`
 
@@ -32,7 +33,7 @@ isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-(cd fitnesse && gradle clean release) || exit
+(cd fitnesse && ./gradlew build release -x test) || exit
 
 isokay "Is the distro okay?" || exit
 
@@ -110,6 +111,6 @@ w
 EOF
 
 echo "Commit all and push"
-(cd fitnessedotorg && git add $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v -m "Release $VERSION via $0" || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
-	&& (cd fitnessedotorg && git push)
+(cd fitnessedotorg && git add ivy.xml $DOWNLOADPAGE $RELEASEDIR releases/$VERSION && git commit -v -m "Release $VERSION via $0" || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
+	&& (cd fitnessedotorg && git push origin HEAD:master)
 
