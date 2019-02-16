@@ -76,7 +76,7 @@ cat > fitnessedotorg/$RELEASEDIR/content.txt << EOF
 !3 FitNesse Release Notes $DATE
 !note Uncle Bob Consulting LLC.
 
-!note !style_red(Requires Java 1.7)
+!note !style_red(Requires Java 8)
 
 !4 Major Changes since [[$OLDVERSION][FitNesseRelease$OLDVERSION]]:
 
