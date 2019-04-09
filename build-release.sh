@@ -28,7 +28,7 @@ isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-(cd fitnesse && ./gradlew build release -x test) || exit
+(cd fitnesse && ./gradlew clean && ./gradlew build release -x test) || exit
 
 isokay "Is the distro okay?" || exit
 
