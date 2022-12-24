@@ -6,16 +6,14 @@ A release consists of a few steps:
  - build a release version
  - create a GitHub release in unclebob/fitnesse
  - Update the website
- - deploy artifacts to Bintray
+ - deploy artifacts to Maven Central
  - update the website on http://fitnesse.org
- - Propagate the released version from Bintray to Maven central
- - An account on https://oss.sonatype.org. Ask them for permission to publish on the `org.fitnesse` repo.
 
 The following access is required:
 
  - SSH access to fitnesse.org - Ask Uncle Bob, Arjan or Fried
  - Push rights on the repos unclebob/fitnesse and fitnesse/fitnessedotorg
- - Deploy rights to the Bintray org for fitnesse
+- An account on https://oss.sonatype.org. Ask them for permission to publish on the `org.fitnesse` repo.
 
 
 # The procedure
@@ -26,10 +24,15 @@ the information from the *real* source repository (`fitnesse`).
 
 Firstly, make sure the `ReleaseNotes` page in the `fitnesse` is up to date.
 
-You'll need to set your Bintray credentials in environment variables:
+You'll need to set your Sonatype credentials and signing config in your gradle settings (e.g. via `~/.gradle/gradle.properties`):
+```
+sonatypeUsername=xxx
+sonatypePassword=***
 
-	export BINTRAY_USER=fhoeben
-	export BINTRAY_API_KEY=7635726357797986533
+signing.keyId=yyy
+signing.password=***
+signing.secretKeyRingFile=/Users/zzz/.gnupg/secring.gpg
+```
 
 
 Only the first time, initialize the submodules:
