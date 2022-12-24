@@ -28,13 +28,11 @@ isokay "Is the ReleaseNotes page up to date?" || exit
 
 (cd fitnesse && git status) && isokay "Is okay?" || exit
 
-(cd fitnesse && ./gradlew clean && ./gradlew build release -x test) || exit
+(cd fitnesse && ./gradlew clean && ./gradlew sign publish -x test) || exit
 
 isokay "Is the distro okay?" || exit
 
-open https://bintray.com/fitnesse/release/fitnesse
-
-isokay "Please release FitNesse on the maven repo?" || exit
+(cd fitnesse && ./gradlew release -x test) || exit
 
 echo "Copying fitnesse-standalone.jar to fitnesse.org"
 mkdir fitnessedotorg/releases/$VERSION
