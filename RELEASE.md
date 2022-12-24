@@ -4,6 +4,7 @@
 A release consists of a few steps:
 
  - build a release version
+ - create a GitHub release in unclebob/fitnesse
  - Update the website
  - deploy artifacts to Bintray
  - update the website on http://fitnesse.org
@@ -40,6 +41,13 @@ Now the release script can be executed:
 	./build-release.sh
 
 Follow the instructions. Do not forget to add a message when committing.
+
+To create a GitHub release:
+- go to https://github.com/unclebob/fitnesse/tags
+- click on the tag for the new release
+- click `Create release from tag`
+- click `Generate release notes`
+- click `Publish release`
 
 To update the website, go to your local checkout of the `fitnessedotorg` repo.
 
