@@ -47,9 +47,10 @@ EOF
 
 echo "Generate static pages"
 rm -rf fitnessedotorg/docs fitnessedotorg/FitNesseRoot/FitNesse fitnessedotorg/FitNesseRoot/TemplateLibrary fitnessedotorg/FitNesseRoot/properties
+rm fitnessedotorg/plugins.properties
 java -jar fitnesse/build/libs/fitnesse-$VERSION-standalone.jar -d fitnessedotorg -c "?publish&destination=fitnessedotorg/docs" -p 8080 || die "Cannot generate static pages"
 
 echo "Commit all and push"
-(cd fitnessedotorg && git add ivy.xml docs releases/$VERSION && git commit -v -m "Release $VERSION via $0" || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
+(cd fitnessedotorg && git checkout plugins.properties && git add ivy.xml docs releases/$VERSION && git commit -v -m "Release $VERSION via $0" || { git stash; die "Not committed (stashed), nothing to do."; }; ) \
 	&& (cd fitnessedotorg && git push origin HEAD:master)
 
